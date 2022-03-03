@@ -1,0 +1,75 @@
+package com.todo.demo;
+
+import java.util.Scanner;
+import java.lang.String;
+import static java.awt.SystemColor.menu;
+
+public class main {
+    static Scanner scan = new Scanner(System.in);
+    static User[] users = new User[100];
+    static int count = 0;
+
+    public static void main(String[] args) {
+        User user = new User();
+        menu();
+    }
+
+    private static void menu() {
+        System.out.println("----------");
+        System.out.println("1.注册\t，2.登录\t");
+        System.out.println("----------");
+        System.out.println("请选择:  ");
+
+        int choice = scan.nextInt();
+        switch (choice) {
+            case 1:
+                register();
+                break;
+            case 2:
+                if (login() != null) {
+                    System.out.println("登入成功");
+                } else {
+                    System.out.println("登录失败");
+                }
+                break;
+        }
+    }
+
+    private static User login() {
+        System.out.println("输入学号：");
+        int id = scan.nextInt();
+        System.out.println("输入密码：");
+        String password = scan.next();
+        for (int i = 0; i < count; i++) {
+            if (id == users[i].getUserId() && users[i].getUserPassword().equals(password)) {
+                return users[i];
+            }
+
+        }return null;
+    }
+
+    private static void register() {
+        User user = new User();
+        System.out.println("输入用户学号");
+        user.setUserId(scan.nextInt());
+        System.out.println("输入用户名称");
+        user.setUserName(scan.next());
+        System.out.println("输入密码");
+        user.setUserPassword(scan.next());
+        System.out.println("输入生日");
+        user.setUserBirth(scan.next());
+        System.out.println("输入年龄");
+        user.setUserAge(scan.nextInt());
+        String str =new String("getUserName");
+        if(count<users.length)
+        {
+            users[count++]=user;
+            System.out.println("注册成功");
+            user.toString();
+            menu();
+        } else {
+            System.out.println("注册失败");
+            menu();
+        }
+    }
+}
