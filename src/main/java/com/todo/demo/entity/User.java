@@ -1,4 +1,4 @@
-package com.todo.demo.Entity;
+package com.todo.demo.entity;
 
 import lombok.Data;
 
