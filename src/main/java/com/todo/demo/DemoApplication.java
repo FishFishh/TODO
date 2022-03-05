@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
-@MapperScan("com.todo.demo.Mapper")
+@MapperScan("com.todo.demo.Mapper")//把Mapper包里面的类注册到springboot
 public class DemoApplication {
 
     public static void main(String[] args) {
