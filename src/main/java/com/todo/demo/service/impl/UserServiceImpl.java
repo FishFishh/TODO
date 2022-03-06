@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Integer deleteById() {
+        return null;
+    }
+
+    @Override
     public Integer deleteById(int id) {
         return null;
     }

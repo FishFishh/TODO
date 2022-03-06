@@ -8,6 +8,6 @@ public interface UserService {
     List<User> findAll();
     User findById();
     User insert(String name,String password);
-    Integer deleteById(int id);
+    Integer deleteById();
     Integer findId(int id);
 }

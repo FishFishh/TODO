@@ -10,11 +10,11 @@
         UPDATE user set Name = #{name}, Password = #{password}
         where Id = #{id}
     </update>
-    <insert id="insert"><!--改-->
+    <insert id="insert" parameterType="User"><!--改-->
         INSERT INTO 'user'('Name','Password')
         VALUES (#{name}, #{password})
     </insert>
-    <delete id="deleteById"><!--删-->
+    <delete id="deleteById" parameterType="Integer"><!--删-->
         DELETE
         FROM user
         where Id = #{id}
