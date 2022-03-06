@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.todo.demo.mapper.UserMapper"><!--和接口的全类名一致-->
-    <resultMap id="user" type=""></resultMap>
     <select id="findAll" resultType="User"><!--resultType"实体类名" parameterType"参数类型"-->
         SELECT *
         FROM user
-        where username = #{username} and password = #{password}
+        where Name = #{name} and Password = #{password}
     </select>
-    <select id=""
+    <update id="findById"><!--新建用户-->
+        UPDATE user set Name = #{name}, Password = #{password}
+        where Id = #{id}
+    </update>
+    <insert id="insert"><!--改-->
+        INSERT INTO 'user'('Name','Password')
+        VALUES (#{name}, #{password})
+    </insert>
+    <delete id="deleteById"><!--删-->
+        DELETE
+        FROM user
+        where Id = #{id}
+    </delete>
+    <select id="findId"><!--统计行数-->
+        SELECT COUNT(Id)
+        FROM user
+        where Id= #{id}
+    </select>
 </mapper>
