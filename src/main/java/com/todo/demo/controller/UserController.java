@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(path="/login",method=RequestMethod.GET)//当前台界面调用Controller处理数据时候告诉控制器怎么操作.作用：URL映射。
-    public String login(String name,String password){
+    public String login(@RequestParam(value = "name") String name, @RequestParam(value = "password")String password){
         User user = userService.login(name,password);
         if(user == null){
             return "error";
