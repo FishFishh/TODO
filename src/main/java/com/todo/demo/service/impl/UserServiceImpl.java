@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
+    public User login(String name, String password) {
+        return null;
+    }
+
+    @Override
     public List<User> findAll() {
         return userMapper.findAll();
     }
@@ -26,11 +31,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User insert(String name, String password) {
-        return null;
-    }
-
-    @Override
-    public Integer deleteById() {
         return null;
     }
 

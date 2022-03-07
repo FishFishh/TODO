@@ -6,21 +6,21 @@
 </head>
 <body>
 <h2>登录</h2>
-用户名:<input type="text" id="username "><br>
-密码﹔<input type="text" id="password">
+用户名:<label for="name"></label><input type="text" id="name"><br>
+密码﹔<label for="password"></label><input type="text" id="password">
 <button onclick="login()">登录</button>
 <script>
-    function login() {//传到后台
-        const username =document.getElementsById("username").value;
-        const password =document.getElementsById("password").value;
 
-        fetch('/login?username' +username+"&password="+password)//左边这个是url传参
-        .then(res=>res.test()).then(res =>{//fetch是前端调用后台接口的api，类似ajax
+    function login() {//传到后台
+        const name =document.getElementById("name").value;
+        const password =document.getElementById("password").value;
+
+        fetch('/login?name'+name+"&password="+password)//左边这个是url传参
+        .then(res=>res.text()).then(res =>{//fetch是前端调用后台接口的api，类似ajax
             if(res ==='success'){
                 location.href = '/'//默认就是这个界面，不写也行
             }
         })
-
     }
 </script>
 </body>
