@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+
 //提供user表数据的一些交互的方法
 @RestController//@RestController 是@ResponseBody和@Controller的结合表明当前类是控制器且返回的是一组数据，不是页面
 
