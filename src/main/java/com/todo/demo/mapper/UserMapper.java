@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper//mapper类 DAO层
 @Repository
 public interface UserMapper {
-    User login(@Param("name") String name,@Param("password") String password);
+    User loginn(@Param("name") String name,@Param("password") String password);
     List<User> findAll();
     User findById();
     User insert(String name,String password);

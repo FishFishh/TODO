@@ -11,17 +11,18 @@ import java.util.List;
 
 //提供user表数据的一些交互的方法
 @RestController//@RestController 是@ResponseBody和@Controller的结合表明当前类是控制器且返回的是一组数据，不是页面
-
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired//这个注解的作用是将其他的类，接口引入，类似于之前的类的初始化等，用这个注解，类中或接口的方法就可以直接调用了
-    private UserService userService;
+    private UserMapper userMapper;
 
     @RequestMapping(path="/login",method=RequestMethod.GET)//当前台界面调用Controller处理数据时候告诉控制器怎么操作.作用：URL映射。
     public String login(String name,String password){
-        User user = userService.login(name,password);
-        String s = name + "" + password;
-        System.out.println(s);
+        User user = userMapper.loginn(name,password);
+
+//        String s = name + "" + password;
+//        System.out.println(s);
 
         if(user == null){
             return "error";
@@ -29,21 +30,20 @@ public class UserController {
         return "success";
     }
 
-
     @GetMapping("/findAll")//@RequestMapping(method = RequestMethod.GET)的简写.作用：对应查询，表明是一个查询URL映射
     public List<User> findAll() {
-        return userService.findAll();
+        return userMapper.findAll();
     }
     @PostMapping("/findById")//@RequestMapping(method = RequestMethod.POST)的简写.作用：对应增加，表明是一个增加URL映射
     public User findById(){
-        return userService.findById();
+        return userMapper.findById();
     }
     @PutMapping("/insert")//@RequestMapping(method = RequestMethod.PUT)的简写作用：对应更新，表明是一个更新URL映射
     public User insert(String name,String password){
-        return userService.insert(name,password);
+        return userMapper.insert(name,password);
     }
     @DeleteMapping("/deleteById")//@RequestMapping(method = RequestMethod.DELETE)的简写.作用：对应删除，表明是一个删除URL映射
     public Integer deleteById(int id){
-        return userService.deleteById(id);
+        return userMapper.deleteById(id);
     }
 }

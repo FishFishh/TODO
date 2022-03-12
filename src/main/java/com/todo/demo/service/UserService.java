@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserService {
-    User login(@Param("name") String name, @Param("password") String password);
+    User loginn(@Param("name") String name, @Param("password") String password);
     List<User> findAll();
     User findById();
     User insert(String name,String password);
