@@ -3,6 +3,7 @@ package com.todo.demo.controller;
 import com.todo.demo.entity.User;
 import com.todo.demo.mapper.UserMapper;
 import com.todo.demo.service.UserService;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class UserController {
 
     @Autowired//这个注解的作用是将其他的类，接口引入，类似于之前的类的初始化等，用这个注解，类中或接口的方法就可以直接调用了
     private UserMapper userMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @RequestMapping(path="/login",method=RequestMethod.GET)//当前台界面调用Controller处理数据时候告诉控制器怎么操作.作用：URL映射。
     public String login(String name,String password){
