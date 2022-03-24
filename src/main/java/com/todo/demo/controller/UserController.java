@@ -20,15 +20,15 @@ public class UserController {
     @RequestMapping(path="/login",method=RequestMethod.GET)//当前台界面调用Controller处理数据时候告诉控制器怎么操作.作用：URL映射。
     public String login(String name,String password){
         User user = userService.loginn(name,password);
-        String s = name + "" + password;
-        System.out.println(s);
+
+//        String s = name + "" + password;
+//        System.out.println(s);
 
         if(user == null){
             return "error";
         }
         return "success";
     }
-
 
     @GetMapping("/findAll")//@RequestMapping(method = RequestMethod.GET)的简写.作用：对应查询，表明是一个查询URL映射
     public List<User> findAll() {
