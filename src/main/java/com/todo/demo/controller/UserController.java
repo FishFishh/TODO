@@ -1,7 +1,6 @@
 package com.todo.demo.controller;
 
 import com.todo.demo.entity.User;
-import com.todo.demo.mapper.UserMapper;
 import com.todo.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
