@@ -1,48 +1,123 @@
 package com.todo.demo.controller;
 
-import com.todo.demo.entity.User;
+import javax.servlet.http.HttpSession;
+import com.todo.demo.common.ApiRestResponse;
+import com.todo.demo.common.Constant;
+import com.todo.demo.exception.fishMallException;
+import com.todo.demo.exception.fishMallExceptionEnum;
+import com.todo.demo.exception.todoExceptionEnum;
+import com.todo.demo.model.pojo.User;
+import com.todo.demo.service.UserService;common.ApiRestResponse;
+import com.todo.demo.common.Constant;
+import com.todo.demo.exception.fishMallException;
+import com.todo.demo.exception.fishMallExceptionEnum;
+import com.todo.demo.model.pojo.User;
 import com.todo.demo.service.UserService;
+import com.todo.demo.service.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.util.List;
-
-//提供user表数据的一些交互的方法
-@RestController//@RestController 是@ResponseBody和@Controller的结合表明当前类是控制器且返回的是一组数据，不是页面
-
+/**
+ *  用户控制器
+ */
+@Controller
 public class UserController {
-
-    @Autowired//这个注解的作用是将其他的类，接口引入，类似于之前的类的初始化等，用这个注解，类中或接口的方法就可以直接调用了
-    private UserService userService;
-
-    @RequestMapping(path="/login",method=RequestMethod.GET)//当前台界面调用Controller处理数据时候告诉控制器怎么操作.作用：URL映射。
-    public String login(String name,String password){
-        User user = userService.loginn(name,password);
-
-//        String s = name + "" + password;
-//        System.out.println(s);
-
-        if(user == null){
-            return "error";
+    @Autowired
+    UserService userService;
+    @GetMapping("/test")
+    @ResponseBody
+    public User personalPage(){
+        return userService.getUser();
+    }
+    @PostMapping("/register")
+    @ResponseBody
+    public ApiRestResponse register(@RequestParam("userName")String userName, @RequestParam("password")String password) throws fishMallException {
+        if(StringUtils.isEmpty(userName)){
+            return ApiRestResponse.error(todoExceptionEnum.NEED_USER_NAME);
         }
-        return "success";
+        if(StringUtils.isEmpty(password)){
+            return ApiRestResponse.error(todoExceptionEnum.NEED_PASSWORD);
+        }
+        //密码长度不能少于八位
+        if(password.length()<8){
+            return ApiRestResponse.error(todoExceptionEnum.PASSWORD_TOO_SHORT);
+        }
+        userService.register(userName,password);
+        return ApiRestResponse.success();
     }
 
-    @GetMapping("/findAll")//@RequestMapping(method = RequestMethod.GET)的简写.作用：对应查询，表明是一个查询URL映射
-    public List<User> findAll() {
-        return userService.findAll();
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public ApiRestResponse login(@RequestParam("userName") String userName,@RequestParam("password") String password, HttpSession session) throws fishMallException {
+        if (StringUtils.isEmpty(userName)) {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_USER_NAME);
+        }
+        if (StringUtils.isEmpty(password)) {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_PASSWORD);
+        }
+        User user = userService.login(userName, password);
+        //保存用户信息时，不保存密码
+        user.setPassword(null);
+        session.setAttribute(Constant.FISH_MALL_USER, user);
+        return ApiRestResponse.success(user);
     }
-    @PostMapping("/findById")//@RequestMapping(method = RequestMethod.POST)的简写.作用：对应增加，表明是一个增加URL映射
-    public User findById(){
-        return userService.findById();
+
+    /**
+     * 更新个性签名
+     */
+    @PostMapping("/user/update")
+    @ResponseBody
+    public ApiRestResponse updateUserInfo(HttpSession session, @RequestParam String signature)
+            throws todoException {
+        User currentUser = (User) session.getAttribute(Constant.FISH_MALL_USER);
+        if (currentUser == null) {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_LOGIN);
+        }
+        User user = new User();
+        user.setId(currentUser.getId());
+        user.setPersonalizedSignature(signature);
+        userService.updateInformation(user);
+        return ApiRestResponse.success();
     }
-    @PutMapping("/insert")//@RequestMapping(method = RequestMethod.PUT)的简写作用：对应更新，表明是一个更新URL映射
-    public User insert(String name,String password){
-        return userService.insert(name,password);
+
+    @PostMapping("/user/logout")
+    @ResponseBody
+    public ApiRestResponse logout(HttpSession session){
+        session.removeAttribute(Constant.FISH_MALL_USER);
+        return ApiRestResponse.success();
     }
-    @DeleteMapping("/deleteById")//@RequestMapping(method = RequestMethod.DELETE)的简写.作用：对应删除，表明是一个删除URL映射
-    public Integer deleteById(int id){
-        return userService.deleteById(id);
+
+    /**
+     * 管理员登录接口
+     */
+    @PostMapping("/adminLogin")
+    @ResponseBody
+    public ApiRestResponse adminLogin(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) throws fishMallException {
+        if (StringUtils.isEmpty(userName)) {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_USER_NAME);
+        }
+        if (StringUtils.isEmpty(password)) {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_PASSWORD);
+        }
+        User user = userService.login(userName, password);
+        //校验是否是管理员
+        if (userService.checkAdminRole(user)) {
+            //是管理员，执行操作
+            //保存用户信息时，不保存密码
+            user.setPassword(null);
+            session.setAttribute(Constant.FISH_MALL_USER, user);
+            return ApiRestResponse.success(user);
+        } else {
+            return ApiRestResponse.error(todoExceptionEnum.NEED_ADMIN);
+        }
     }
 }
